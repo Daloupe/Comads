@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <StartupObject>Comads_.NET_Core_.Program</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Types\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.10.12" />
+    <PackageReference Include="BenchmarkDotNet.Core" Version="0.10.12" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.10.12" />
+    <PackageReference Include="BenchmarkDotNet.Toolchains.Roslyn" Version="0.10.12" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  asp.net:
+    image: aspnet
+    build:
+      context: .\ASP.NET
+      dockerfile: Dockerfile
