@@ -1,4 +1,0 @@
-﻿Maybe - Some/None
-Either - Left/Right
-Async - Tasks
-IO - Query/Command
