@@ -1,0 +1,6 @@
+﻿Maybe - Some/None
+Either - Left/Right
+Async - Tasks
+IO - Query/Command
+
+Anything that makes these easier: http://mikaelkoskinen.net/post/mongodb-aggregation-framework-examples-in-c
