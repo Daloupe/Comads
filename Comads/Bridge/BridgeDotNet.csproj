@@ -44,7 +44,9 @@
     <Content Include="bridge.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Bridge, Version=16.7.0.0, Culture=neutral, processorArchitecture=MSIL">
