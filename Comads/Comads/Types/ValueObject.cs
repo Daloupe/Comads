@@ -28,7 +28,7 @@ namespace Comads
     {
         public static Func<TModel, ValueObject> Create<TModel>(Reader<TModel> getter)
         {
-            return (owner) => new ValueObject(getter(owner), owner.GetHashCode());
+            return (owner) => new ValueObject(getter?.Invoke(owner), owner.GetHashCode());
         }
 
         public static ValueObject Create<TModel>(object value, TModel owner)

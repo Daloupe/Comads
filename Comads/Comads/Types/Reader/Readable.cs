@@ -24,7 +24,7 @@ namespace Comads
 
         public static readonly ReaderCollection<T> Readers = ReaderFactory<T>.CreateCollection();
 
-        public List<T> Values;
+        public readonly List<T> Values;
 
         public Readable(IEnumerable<T> values)
         {
@@ -45,7 +45,12 @@ namespace Comads
         {
             var readers = Readers.Where(n => prop.Contains(n.Type.Name)).Select(n => n.Reader);
 
-            return readers.SelectMany(reader => Values.Select(n => new ValueObject(reader(n), n.GetHashCode(), reader.Method.Name)));
+            return readers.SelectMany(reader => Values.Select(n => new ValueObject(reader?.Invoke(n), n.GetHashCode(), reader.Method.Name)));
+        }
+
+        public IEnumerable<ValueObject> ReadAllProps()
+        {
+            return Readers.SelectMany(reader => Values.Select(n =>ValueObject.Create(reader.Reader)(n)));
         }
 
         public IEnumerator<T> GetEnumerator() => Values.GetEnumerator();
@@ -77,7 +82,7 @@ namespace Comads
 
             var list = new List<ValueObject>();
 
-            foreach (var prop in ReaderFactory<T>.CreateCollection())
+            foreach (var prop in Readable<T>.Readers)
             {
                 foreach (var value in source.Values)
                 {

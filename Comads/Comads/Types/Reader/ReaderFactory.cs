@@ -47,7 +47,7 @@ namespace Comads
         {
             return typeof(TModel)
                 .GetTypeInfo()
-                .GetProperties(BindingFlags.Public | ~BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+                .GetProperties(BindingFlags.Public | ~BindingFlags.Static );
                 //.Where(IgnoreAttributes.And(IgnoreArguments));
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Comads
 {
@@ -18,9 +19,11 @@ namespace Comads
         {
         }
 
-        public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func)
+
+
+        public Maybe<TO> Then<TO>(Func<T, TO> func)
         {
-            return !EqualityComparer<T>.Default.Equals(value, default(T)) ? func?.Invoke(value) : Maybe<TO>.None();
+            return new Maybe<TO>(func(value));
         }
 
         public static Maybe<T> None() => new Maybe<T>();
@@ -33,17 +36,25 @@ namespace Comads
             return !EqualityComparer<T>.Default.Equals(value, default(T)) ? new Maybe<T>(value) : Maybe<T>.None();
         }
 
-        public static IEnumerable<B> SelectMany<A, B>(
-            this IEnumerable<Maybe<A>> first,
-            Func<A, IEnumerable<B>> selector)
+        public static IEnumerable<B> Selecty<A, B>(this IEnumerable<A> first, Func<A, IEnumerable<B>> selector)
         {
             foreach (var outer in first)
             {
-                foreach (var inner in selector(outer.value))
+                foreach (var inner in selector?.Invoke(outer))
                 {
                     yield return inner;
                 }
             }
+        }
+
+        public static int Sum(this IEnumerable<int> seq)
+        {
+            return seq.Aggregate(0,(a, b) => a + b);
+        }
+
+        public static int Product(this IEnumerable<int> seq)
+        {
+            return seq.Aggregate(1, (a, b) => a * b);
         }
     }
 }
