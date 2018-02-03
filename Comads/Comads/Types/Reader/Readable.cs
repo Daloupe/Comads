@@ -21,7 +21,8 @@ namespace Comads
     /// </summary>
     public partial class Readable<T> : IEnumerable<T>
     {
-        public static ReaderCollection<T> Readers = ReaderFactory<T>.CreateCollection();
+
+        public static readonly ReaderCollection<T> Readers = ReaderFactory<T>.CreateCollection();
 
         public List<T> Values;
 
@@ -70,13 +71,13 @@ namespace Comads
         /// We loop over every reader, and check if we get a non empty value from our sources, as soon as we do, we move to the next reader.#
         /// As the target object is first in the list of sources it will alwasy take precedence.
         /// </summary>
-        public static ConcurrentQueue<ValueObject> FillBlanks<T>(this Readable<T> source, T fillSource)
+        public static List<ValueObject> FillBlanks<T>(this Readable<T> source, T fillSource)
         {
             source.Values.Add(fillSource);
 
-            var queue = new ConcurrentQueue<ValueObject>();
+            var list = new List<ValueObject>();
 
-            foreach (var prop in Readable<T>.Readers)
+            foreach (var prop in ReaderFactory<T>.CreateCollection())
             {
                 foreach (var value in source.Values)
                 {
@@ -84,7 +85,7 @@ namespace Comads
 
                     if (obj.IsEmpty()) continue;
 
-                    queue.Enqueue(new ValueObject(obj, source.GetHashCode(), prop.Type.Name));
+                    list.Add(new ValueObject(obj, source.GetHashCode(), prop.Type.Name));
 
                     break;
                 }
@@ -151,7 +152,7 @@ namespace Comads
 
             //});
 
-            return queue;
+            return list;
         }
     }
 }

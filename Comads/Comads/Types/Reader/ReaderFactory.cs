@@ -15,30 +15,30 @@ namespace Comads
         static readonly Predicate<PropertyInfo> IgnoreAttributes;
         static readonly Predicate<PropertyInfo> IgnoreArguments;
 
-        static ReaderFactory()
-        {
-            var AttributesToIgnore = new HashSet<Type>
-            {
+        //static ReaderFactory()
+        //{
+            //var AttributesToIgnore = new HashSet<Type>
+            //{
                 //typeof(MongoDB.Bson.Serialization.Attributes.BsonIgnoreAttribute)
-            };
+            //};
 
-            IgnoreAttributes =
-                (prop) =>
-                !prop.CustomAttributes
-                .Any(attr => AttributesToIgnore.Contains(attr.AttributeType));
+            //IgnoreAttributes =
+            //    (prop) =>
+            //    !prop.CustomAttributes
+            //    .Any(attr => AttributesToIgnore.Contains(attr.AttributeType));
 
 
-            var AttributeValuesToIgnore = new HashSet<string>
-            {
-                "_version"
-            };
+        //    var AttributeValuesToIgnore = new HashSet<string>
+        //    {
+        //        "_version"
+        //    };
 
-            IgnoreArguments =
-                (prop) =>
-                !prop.CustomAttributes
-                .SelectMany(attr => attr.ConstructorArguments)
-                .Any(arg => arg.Value != null && AttributeValuesToIgnore.Contains(arg.Value));
-        }
+        //    IgnoreArguments =
+        //        (prop) =>
+        //        !prop.CustomAttributes
+        //        .SelectMany(attr => attr.ConstructorArguments)
+        //        .Any(arg => arg.Value != null && AttributeValuesToIgnore.Contains(arg.Value));
+        //}
 
         /// <summary>
         /// Create base public non static property collection, ignoring certain attributes.
@@ -47,8 +47,8 @@ namespace Comads
         {
             return typeof(TModel)
                 .GetTypeInfo()
-                .GetProperties(BindingFlags.Public | ~BindingFlags.Static)
-                .Where(IgnoreAttributes.And(IgnoreArguments));
+                .GetProperties(BindingFlags.Public | ~BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+                //.Where(IgnoreAttributes.And(IgnoreArguments));
         }
     }
 

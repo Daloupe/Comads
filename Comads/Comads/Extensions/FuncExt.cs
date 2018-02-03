@@ -9,7 +9,7 @@ namespace Comads
         /// </summary>
         public static Func<A, bool> And<A>(this Predicate<A> first, Predicate<A> second)
         {
-            return (value) => first(value) && second(value);
+            return (value) => !(first is null) && first(value) && !(second is null) && second(value);
         }
     }
 }
