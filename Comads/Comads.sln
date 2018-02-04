@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansGrainInterfaces", "O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansGrains", "OrleansGrains\OrleansGrains.csproj", "{36787DEE-5A41-475F-AE18-3E65B450687B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansClient", "ConsoleApp1\OrleansClient.csproj", "{FAA16468-20FA-4B2B-9888-A6D0BED5AB20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{36787DEE-5A41-475F-AE18-3E65B450687B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36787DEE-5A41-475F-AE18-3E65B450687B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36787DEE-5A41-475F-AE18-3E65B450687B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAA16468-20FA-4B2B-9888-A6D0BED5AB20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAA16468-20FA-4B2B-9888-A6D0BED5AB20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAA16468-20FA-4B2B-9888-A6D0BED5AB20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAA16468-20FA-4B2B-9888-A6D0BED5AB20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
