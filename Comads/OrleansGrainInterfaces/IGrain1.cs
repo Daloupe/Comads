@@ -8,6 +8,7 @@ namespace Comads
     /// </summary>
     public interface IGrain1 : IGrainWithIntegerKey
     {
-        Task<string> Reply(string message);
+        Task<string> SayHello(string greeting);
+
     }
 }

@@ -59,6 +59,9 @@
     <PackageReference Include="Microsoft.Orleans.Client">
       <Version>2.0.0-beta3</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Orleans.Logging.Legacy">
+      <Version>2.0.0-beta3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientConfiguration.xml">

@@ -1,46 +1,87 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Orleans;
+﻿using Orleans;
 using Orleans.Runtime;
+using Orleans.Runtime.Configuration;
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Comads;
+using Orleans.Hosting;
 
-namespace Comads
+namespace OrleansClient
 {
-    class Program
+    /// <summary>
+    /// Orleans test silo client
+    /// </summary>
+    public class Program
     {
-        static async Task Main(string[] args)
+        static int Main(string[] args)
         {
-            Console.Title = "Client";
+            Console.WriteLine("Searching for Host");
+            return RunMainAsync().Result;
+        }
 
+        private static async Task<int> RunMainAsync()
+        {
+            try
+            {
+                using (var client = await StartClientWithRetries())
+                {
+                    await DoClientWork(client);
+                    
+                }
+                Console.ReadKey();
+                return 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.Read();
+                return 1;
+            }
+        }
+
+        private static async Task<IClusterClient> StartClientWithRetries(int initializeAttemptsBeforeFailing = 5)
+        {
+            int attempt = 0;
+            IClusterClient client;
+            await Task.Delay(TimeSpan.FromSeconds(3));
             while (true)
             {
                 try
                 {
-                    var client = ClientBuilder
-                    .CreateDefault()
-                    .LoadConfiguration("ClientConfiguration.xml")
-                    .ConfigureServices(services =>
-                    {
-                      // Add services if you ddarrreeeeee
-                    })
-                    .Build();
+                    var config = ClientConfiguration.LoadFromFile("ClientConfiguration.xml");
+  
+                    client = new ClientBuilder()
+                        .UseConfiguration(config)
+                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGrain1).Assembly).WithReferences())
+                        .ConfigureLogging(logging => logging.AddFilter("Orleans", LogLevel.Warning))
+                        .Build();
 
-                    await client.Connect().ConfigureAwait(false);
-                    Console.WriteLine("Connected to silo!");
-
-                    var friend = client.GetGrain<IGrain1>(0);
-                    Console.WriteLine(await friend.Reply("Hello!"));
-
-
-                    Console.ReadLine();
+                    await client.Connect();
+                    Console.WriteLine("Client successfully connect to silo host");
                     break;
                 }
                 catch (SiloUnavailableException)
                 {
-                    Console.WriteLine("Silo not available! Retrying in 3 seconds.");
-                    Thread.Sleep(3000);
+                    attempt++;
+                    Console.WriteLine($"Attempt {attempt} of {initializeAttemptsBeforeFailing} failed to initialize the Orleans client.");
+                    if (attempt > initializeAttemptsBeforeFailing)
+                    {
+                        throw;
+                    }
+                    await Task.Delay(TimeSpan.FromSeconds(3));
                 }
-            }
+             }
+
+            return client;
+        }
+
+        private static async Task DoClientWork(IClusterClient client)
+        {
+            // example of calling grains from the initialized client
+            var friend = client.GetGrain<IGrain1>(0);
+            var response = await friend.SayHello("Good morning, my friend!");
+            Console.WriteLine("\n\n{0}\n\n", response);
         }
     }
 }
