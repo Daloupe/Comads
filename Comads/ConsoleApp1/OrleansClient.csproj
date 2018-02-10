@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>OrleansClient.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
+    <CodeAnalysisRuleSet>OrleansClient.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="OrleansClient.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OrleansGrainInterfaces\OrleansGrainInterfaces.csproj">
@@ -61,6 +64,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Orleans.Logging.Legacy">
       <Version>2.0.0-beta3</Version>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <Version>6.7.1.4347</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

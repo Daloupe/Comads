@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using EfficientlyLazy.IdentityGenerator;
 using EfficientlyLazy.IdentityGenerator.Entity;
 
@@ -20,54 +21,46 @@ namespace Comads
 
         }
     }
+
     public static class PersonGenerator
     {
-        static Random R = new Random();
+        static readonly Random R = new Random();
 
-        public static Queue<string> LastNames;
-        public static Queue<string> FirstNames;
-        public static Queue<Address> Addresses;
+        static Queue<string> LastNames;
+        static Queue<Name> FirstNames;
+        static Queue<Address> Addresses;
 
-        public static void GenerateLastNames(int count)
+        static void GenerateLastNames(int count)
         {
             LastNames = new Queue<string>(
-                Generator
-                .SetOptions()
-                .IncludeGenderBoth()
-                .CreateGenerator()
-                .GenerateIdentities(count)
-                .Select(n => n.Last));  
+                Enumerable
+                .Range(0, count)
+                .Select(n => Generator.GenerateName().Last));
         }
 
-        public static void GenerateFirstNames(int count)
+        static void GenerateFirstNames(int count)
         {
-            FirstNames = new Queue<string>(
-                Generator
-            .SetOptions()
-            .IncludeGenderBoth()
-            .CreateGenerator()
-            .GenerateIdentities(count)
-            .Select(n => n.First)
-            .ToImmutableList());
+            FirstNames = new Queue<Name>(
+               Enumerable
+               .Range(0, count)
+               .Select(n => Generator.GenerateName(true, true)));
         }
 
-        public static void GenerateAddresses(int count)
+        static void GenerateAddresses(int count)
         {
             Addresses = new Queue<Address>(
-                Generator
-            .SetOptions()
-            .IncludeAddress()
-            .CreateGenerator()
-            .GenerateIdentities(count)
-            .Select(identity => identity.Address));
+                Enumerable
+                .Range(0, count)
+                .Select(n => Generator.GenerateAddress()));
         }
 
         public static IEnumerable<Person> GenerateFamilies(int count, int size)
         {
             var personCount = count * size;
+
             GenerateLastNames(count);
-            GenerateFirstNames(personCount);
             GenerateAddresses(count);
+            GenerateFirstNames(personCount);
 
             for (int i = 0; i < count; i++)
             {
@@ -87,24 +80,28 @@ namespace Comads
             return Create(person.FirstName, person.LastName, person.Address, person.Gender);
         }
 
-        public static Person Create(string firstName, string lastName, Address address, Gender? gender = null, DateTime? dob = null)
+        public static Person Create(Name firstName, string lastName, Address address)
         {
-            var _generator = Generator
-            .SetOptions()
-            .IncludeDOB()
-            .IncludeGenderBoth()
-            .SetAgeRange(8, 40)
-            .IncludeAddress()
-            .IncludeSSN()
-            .CreateGenerator();
+            return new Person()
+            {
+                FirstName = firstName.First,
+                MiddleName = firstName.Middle,
+                LastName = lastName,
+                Gender = firstName.Gender,
+                Address = address
+            };
+        }
 
-            var identity = _generator.GenerateIdentity();
+        public static Person Create(string firstName, string lastName, Address address, Gender gender)
+        {
+            var identity = Generator.GenerateName();
+
             return new Person()
             {
                 FirstName = firstName,
                 MiddleName = identity.Middle,
                 LastName = lastName,
-                Gender = gender ?? (Gender)Enum.Parse(typeof(Gender), identity.Gender.ToString()),
+                Gender = gender,
                 Address = address
             };
         }

@@ -16,9 +16,10 @@ namespace Comads
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string Name{ get; }
+        public string Name { get; }
         //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int OwnersHashCode { get; }
+
     }
 
     /// <summary>
@@ -38,18 +39,49 @@ namespace Comads
     }
 
     /// <summary>
-    /// Bookeeping
+    /// Bookkeeping
     /// </summary>
     public partial struct ValueObject : IEquatable<ValueObject>, IComparable<ValueObject>
     {
-        public override string ToString() => Value.ToString();
 
         public int CompareTo(ValueObject other) => ToString().CompareTo(other.ToString());
 
         public bool Equals(ValueObject other) => Value.Equals(other.Value);
 
-        public override bool Equals(object obj) => Equals(obj);
+        public override bool Equals(object obj) => Equals(obj is ValueObject vo);
 
         public override int GetHashCode() => Value.GetHashCode();
+        public override string ToString() => Value.ToString();
+
+
+        public static bool operator ==(ValueObject left, ValueObject right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ValueObject left, ValueObject right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator <(ValueObject left, ValueObject right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator <=(ValueObject left, ValueObject right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >(ValueObject left, ValueObject right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator >=(ValueObject left, ValueObject right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
     }
 }
